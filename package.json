@@ -1,0 +1,65 @@
+{
+  "name": "react-terraform-starter-kit",
+  "version": "1.0.0",
+  "description": "Restrict access to S3 files with an AWS API Gateway custom authorizer",
+  "main": "index.js",
+  "scripts": {
+    "init": "pushd ./service && terraform init && popd",
+    "plan": "pushd ./service && terraform plan -out \".plan\" && popd",
+    "apply": "pushd ./service && terraform apply \".plan\" && popd",
+    "destroy": "pushd ./service && terraform destroy && popd",
+    "create": "npm run init && npm run plan && npm run apply && npm run build && npm run sync && npm run open",
+    "state": "terraform output -state=./service/terraform.tfstate",
+    "build:state": "npm run --silent state -- -json > ./client/data/terraform_output.json",
+    "build:html": "node ./node_modules/mustache/bin/mustache ./client/data/terraform_output.json ./client/index.mustache > ./bucket/public/index.html",
+    "build:bundle": "NODE_ENV=production node ./node_modules/webpack/bin/webpack.js -p",
+    "build:bundle-dev": "NODE_ENV=development node ./node_modules/webpack/bin/webpack.js",
+    "build:static": "node ./node_modules/ncp/bin/ncp ./client/static ./bucket/public",
+    "build": "npm run build:state && npm run build:html && npm run build:bundle && npm run build:static",
+    "sync": "aws s3 sync ./bucket \"s3://$(npm run --silent state -- bucket_name)\" --exclude \".*\"",
+    "open": "node -e \"require('opn')('$(npm run --silent state -- api_url)'); process.exit();\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamjarret/react-terraform-starter-kit.git"
+  },
+  "author": "Adam Jarret <adam@atj.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adamjarret/react-terraform-starter-kit/issues"
+  },
+  "homepage": "https://github.com/adamjarret/react-terraform-starter-kit#readme",
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.6",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.4",
+    "eslint": "^4.2.0",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "mustache": "^2.3.0",
+    "ncp": "^2.0.0",
+    "opn": "^5.1.0",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.1.0"
+  },
+  "dependencies": {
+    "keymirror": "^0.1.1",
+    "material-ui": "^0.19.4",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "^4.1.1",
+    "react-tap-event-plugin": "^2.0.1",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0",
+    "superagent": "^3.5.2"
+  }
+}

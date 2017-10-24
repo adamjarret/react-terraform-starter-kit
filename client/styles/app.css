@@ -1,0 +1,121 @@
+body {
+    /* HelveticaNeue-UltraLight is not visible enough against the pattern background */
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    background-color: #efefef;
+    background-size: 8px 8px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAFVBMVEX19fX5+fn////k5OTt7e329vbn5+fBCH8pAAAAPklEQVR4Xk3MMREAMAzDQFEwBVMwhVAohfCH0Ot1SBbdT8IljsXgxbUBidQLUgL0oIx80OClvAG0lAz+deECYCQPaft8rYoAAAAASUVORK5CYII=');
+}
+
+b {
+    font-weight: 800;
+}
+
+p {
+    line-height: 1.5em;
+}
+
+/* unvisited link */
+a:link {
+    color: #000000;
+}
+
+/* visited link (blueGrey700) */
+a:visited {
+    color: #455A64;
+}
+
+/* mouse over link (blueGrey500) */
+a:hover {
+    color: #607D8B;
+}
+
+/* selected link */
+a:active {
+    color: #000000;
+}
+
+h1 > span,
+h2 > span,
+h3 > span,
+h4 > span,
+h5 > span {
+    font-weight: 300;
+    color: #B0BEC5; /* blueGrey300=90A4AE, blueGrey200=B0BEC5 */
+}
+
+.align-center {
+    text-align: center;
+}
+
+.padding-2x {
+    padding: 20px;
+}
+
+.margin-2x {
+    margin: 20px;
+}
+
+/* clearfix (Thanks https://css-tricks.com/snippets/css/clear-fix/) */
+
+.group:before,
+.group:after {
+    content: "";
+    display: table;
+}
+
+.group:after {
+    clear: both;
+}
+
+.group {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+/* Log In */
+
+.login .mainText {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Images */
+
+.headImg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Image Overlay */
+
+.overlay-container {
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+}
+
+.overlay .text {
+    line-height: 1.5em;
+    padding: 10px;
+    color: #FFFFFF;
+}
+
+@media (min-width: 768px) {
+    /* increase overlay text padding for resolutions >= screen-sm */
+    .overlay .text {
+        padding: 20px
+    }
+}
+
