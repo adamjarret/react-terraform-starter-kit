@@ -45,9 +45,11 @@ variable "api_stage_name" {
 }
 
 # Disable stage logs or set log level
+# Note: Cloud Watch Logs must be enabled for API Gateway in order to use values other than OFF
+# See https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/ for more information.
 variable "api_stage_logging_level" {
   type = "string"
-  default = "ERROR" # valid: OFF, ERROR, and INFO
+  default = "OFF" # valid: OFF, ERROR, and INFO
 }
 
 # Disable/enable detailed CloudWatch metrics for stage

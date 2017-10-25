@@ -1,4 +1,4 @@
-# <img alt="react-terraform-starter-kit" src="http://cdn.atj.me/rtsk/rtsk_logo.png" width="512" height="192" />
+# <img alt="react-terraform-starter-kit" src="http://cdn.atj.me/rtsk/rtsk_logo.png" width="512" />
 
 This project can serve as a simple starting point for AWS microservices that use an API Gateway with a custom Authorizer
 to invoke Lambda functions and proxy requests for static files.
@@ -17,7 +17,7 @@ files that make up the client site are uploaded to the **public** folder and the
 **public/index.html** as the root resource.
 
 The API Gateway has a resource `/api/login` that invokes a Lambda function which checks the provided password against an
-environment variable. If the password is correct, a token is returned (both in the body of the request an in the
+environment variable. If the password is correct, a token is returned (both in the body of the request and in the
 Set-Cookie header).
 
 In subsequent requests to the API, the browser will send the token in the Cookie header which is used by the
@@ -60,9 +60,15 @@ To configure your default AWS credentials:
 
     aws configure
     
-Note: The `aws` and `terraform` commands will use the default credentials to perform operations on your behalf.
-**The profile you configure as the default needs to have full access to IAM, S3, KMS, API Gateway and
-Lambda.**
+**The profile you configure as the default needs to have permission to perform all actions used to apply the Terraform
+configration. The AWS products used in the example are: IAM, S3, KMS, API Gateway and Lambda.**
+
+There [has been discussion](https://github.com/hashicorp/terraform/issues/2834) of how best to determine the
+exact minimal permissions needed for Terraform to apply a given configuration, but the issues involved are complex.
+The simplest approach is to run terraform with credentials that have been granted full access to all required AWS 
+products. It's up to you to find the appropriate balance of convenience and security. For example, one
+approach is to have multiple Terraform configurations (ex. one to create and one to destroy) that can separate
+permissions so one role does not have too much power.
 
 ### Install Terraform
 
@@ -105,7 +111,13 @@ To completely eradicate the service on AWS (delete all created assets):
 
     npm run destroy 
     
-Note: This will only delete S3 buckets if they are empty.
+Note: By default, `destroy` will only delete the S3 bucket if it is empty. To change this behavior, set the
+[`force_destroy`](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html#force_destroy) option on the 
+`aws_s3_bucket` definition in **service/s3.tf**.
+
+Alternately, use the AWS CLI to delete a non-empty bucket:
+
+    aws s3 rb s3://my-bucket-name --force
 
 #### Granular Approach
     
@@ -152,9 +164,9 @@ Build **bundle.js** with Webpack, render **index.html** from **index.mustache** 
 
 ##### Upload Bucket Content
 
-To upload the public/private files from the local bucket folder:
-
     npm run sync
+
+The `sync` command will upload the public/private files from the local **bucket** folder to the S3 bucket.
 
 *`sync` will fail if run before `apply` because it depends on the terraform output variables.*
 
@@ -199,7 +211,7 @@ There are ways of automatically detecting when to redeploy, described in
 [this article](https://medium.com/coryodaniel/til-forcing-terraform-to-deploy-a-aws-api-gateway-deployment-ed36a9f60c1a).
 
 For more granular control over stage deployments, remove `aws_api_gateway_deployment`, `aws_api_gateway_stage` and
-`aws_api_gateway_method_settings` from **service/api.tf** and use the AWS cli to deploy the stage.
+`aws_api_gateway_method_settings` from **service/api.tf** and use the AWS CLI to deploy the stage.
 
 You can add the following to the scripts section in package.json for convenience:
 
@@ -250,9 +262,9 @@ that can bundle your function code with it's dependencies into a single file.
 
 To use a custom domain name (ex. example.com instead of umk4e4l4r8.execute-api.us-east-1.amazonaws.com) you can
 add definitions for
-[aws_api_gateway_domain_name](https://www.terraform.io/docs/providers/aws/r/api_gateway_domain_name.html),
-[aws_route53_record](https://www.terraform.io/docs/providers/aws/r/route53_record.html)
-and optionally [aws_iam_server_certificate](https://www.terraform.io/docs/providers/aws/d/iam_server_certificate.html)
+[`aws_api_gateway_domain_name`](https://www.terraform.io/docs/providers/aws/r/api_gateway_domain_name.html),
+[`aws_route53_record`](https://www.terraform.io/docs/providers/aws/r/route53_record.html)
+and optionally [`aws_iam_server_certificate`](https://www.terraform.io/docs/providers/aws/d/iam_server_certificate.html)
 to the Terraform configuration.
 
 Note: Remember to change the `endpointPrefix` value in **client/constants/Urls.js** to be an empty string (`''`) if 
@@ -260,7 +272,7 @@ using a custom domain name.
 
 ## More Information
 
-### Multiple `aws_api_gateway_method_response` Definitions
+### Multiple Method Response Definitions
 
 If an `aws_api_gateway_method` defines more than one `aws_api_gateway_method_response` (as is the case in
 **service/api_private.tf** and **service/api_login.tf**) the `apply` command can
