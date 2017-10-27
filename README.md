@@ -65,8 +65,8 @@ configration. The AWS products used in the example are: IAM, S3, KMS, API Gatewa
 
 There [has been discussion](https://github.com/hashicorp/terraform/issues/2834) of how best to determine the
 exact minimal permissions needed for Terraform to apply a given configuration, but the issues involved are complex.
-The simplest approach is to run terraform with credentials that have been granted full access to all required AWS 
-products. It's up to you to find the appropriate balance of convenience and security. For example, one
+**The simplest approach is to run terraform with credentials that have been granted full access to all required AWS 
+products**. It's up to you to find the appropriate balance of convenience and security. For example, one
 approach is to have multiple Terraform configurations (ex. one to create and one to destroy) that can separate
 permissions so one role does not have too much power.
 
@@ -255,7 +255,7 @@ lambda function to also accept a username and check a password hash in a databas
 
 Eventually you'll want to utilize code from an npm module inside a Lambda function. It's possible to
 [create a payload that includes the **node_modules** folder](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html),
-or you can [configure Webpack with multiple entry points](https://webpack.js.org/concepts/#entry)
+or you can [configure Webpack with multiple entry points](https://atj.me/b903)
 that can bundle your function code with it's dependencies into a single file.
 
 ### Custom Domain Name
