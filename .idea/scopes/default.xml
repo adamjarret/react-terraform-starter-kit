@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="default" pattern="(file[react-terraform-starter-kit]:client//*||file[react-terraform-starter-kit]:service//*)&amp;&amp;!file:service/terraform.tfstate&amp;&amp;!file:service/terraform.tfstate.backup&amp;&amp;!file[react-terraform-starter-kit]:service/.terraform//*&amp;&amp;!file[react-terraform-starter-kit]:service/build//*&amp;&amp;!file:service/.plan&amp;&amp;!file[react-terraform-starter-kit]:client/data//*||file:webpack.config.js" />
-</component>
