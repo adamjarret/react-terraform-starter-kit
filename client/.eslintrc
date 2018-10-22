@@ -12,12 +12,36 @@
   },
   "rules": {
     "no-console": 0,
-    "no-debugger": 1
+    "no-debugger": 1,
+    "indent": [
+      "error",
+      4
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ]
   },
   "parser": "babel-eslint",
   "plugins": [
     "react",
     "babel"
   ],
-  "extends": ["eslint:recommended", "plugin:react/recommended"]
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ]
 }

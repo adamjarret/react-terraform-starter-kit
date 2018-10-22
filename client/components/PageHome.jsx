@@ -1,65 +1,97 @@
-import React, {Component} from 'react'
-import PropTypes from 'prop-types'
-import {Redirect, withRouter} from 'react-router-dom'
-import {compose} from 'redux'
-import Paper from 'material-ui/Paper'
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import {endpointPrefix, loginUrl, logoutUrl} from '~/constants/Urls'
-import {withAuth} from '~/containers'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom';
+import {compose} from 'redux';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import {withStyles} from '@material-ui/core/styles';
+import {loginUrl} from '~/constants/Urls';
+import {endpointPrefix} from '~/constants/ClientConfig';
+import {withAuth} from '~/containers';
+import NavMenu from './NavMenu';
 
 const headImgUrl = endpointPrefix + '/private/treasure.jpg';
 const audioFileName = endpointPrefix + '/private/tada';
 
+const styles = (theme) => ({
+    root: {
+        flexGrow: 1
+    },
+    player: {
+        padding: '10px'
+    },
+    audio: {
+        width: '100%'
+    },
+    headImg: {
+        display: 'block',
+        width: '100%',
+        height: 'auto',
+        minHeight: '300px'
+    },
+    overlayContainer: {
+        position: 'relative'
+    },
+    overlay: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        overflow: 'hidden',
+        width: '100%',
+        height: 'auto'
+    },
+    overlayText: {
+        lineHeight: '1.5em',
+        padding: '10px',
+        color: '#FFFFFF',
+        [theme.breakpoints.up('sm')]: {
+            padding: '20px',
+        }
+    }
+});
+
 export class PageHome extends Component
 {
-    componentWillMount()
-    {
-        this.logout = () => this.props.history.push(logoutUrl);
-    }
-
     render()
     {
-        const {auth: {token}} = this.props;
+        const {auth: {token}, classes} = this.props;
         return !token ? (
             <Redirect to={loginUrl}/>
         ) : (
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-8 col-md-offset-2">
+            <div className={classes.root}>
+                <Grid container spacing={24} justify="center">
+                    <Grid item xs={12} sm={8} md={6}>
                         <Paper>
-                            <div className="group">
-                                <IconMenu
-                                    iconButtonElement={<IconButton><MoreVertIcon/></IconButton>}
-                                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                                    style={{float: 'right'}}
-                                >
-                                    <MenuItem primaryText="Sign Out" onTouchTap={this.logout}/>
-                                </IconMenu>
-                            </div>
-                            <div className="overlay-container loaded group">
-                                <a href={headImgUrl} target="_blank">
-                                    <img src={headImgUrl} alt="Photo" className="headImg"/>
-                                </a>
-                                <div className="overlay">
-                                    <div className="text">
-                                        You found the treasure!
+                            <header className="group">
+                                <NavMenu/>
+                            </header>
+                            <main>
+                                <div className={classes.overlayContainer + ' group'}>
+                                    <a href={headImgUrl} target="_blank" rel="noopener noreferrer">
+                                        <img src={headImgUrl} alt="Photo" className={classes.headImg}/>
+                                    </a>
+                                    <div className={classes.overlay}>
+                                        <Typography className={classes.overlayText} component="div">
+                                            You found the treasure!
+                                        </Typography>
                                     </div>
                                 </div>
-                            </div>
-                            <div style={{padding: '10px'}}>
-                                <audio preload="metadata" style={{width: '100%'}} controls>
-                                    <source src={audioFileName + '.ogg'} id="oggSource" type="audio/ogg" />
-                                    <source src={audioFileName + '.mp3'} id="mp3Source" type="audio/mpeg" />
-                                    Your browser does not support the audio element.
-                                </audio>
-                            </div>
+                                <div className={classes.player}>
+                                    <audio preload="metadata" className={classes.audio} controls>
+                                        <source src={audioFileName + '.ogg'} id="oggSource" type="audio/ogg"/>
+                                        <source src={audioFileName + '.mp3'} id="mp3Source" type="audio/mpeg"/>
+                                        <Typography component="p">
+                                            Your browser does not support the audio element.
+                                        </Typography>
+                                    </audio>
+                                </div>
+                            </main>
                         </Paper>
-                    </div>
-                </div>
+                    </Grid>
+                </Grid>
             </div>
         );
     }
@@ -67,7 +99,8 @@ export class PageHome extends Component
 
 PageHome.propTypes = {
     auth: PropTypes.object,
-    history: PropTypes.object
+    classes: PropTypes.object
 };
 
-export default compose(withAuth, withRouter)(PageHome)
+export default compose(withAuth, withStyles(styles))(PageHome);
+

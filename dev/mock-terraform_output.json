@@ -1,0 +1,11 @@
+{
+  "api_name": {
+    "value": "RTSK"
+  },
+  "api_stage": {
+    "value": "v1"
+  },
+  "bucket_url": {
+    "value": ""
+  }
+}

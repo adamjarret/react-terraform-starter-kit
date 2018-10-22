@@ -1,10 +1,8 @@
-.plan
-build
-
 #
 # Terraform
 
 # Compiled files
+*.tfplan
 *.tfstate
 *.tfstate.*.backup
 *.tfstate.backup

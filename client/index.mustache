@@ -4,9 +4,16 @@
     <title>{{{ api_name.value }}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{{{ bucket_url.value }}}/public/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 </head>
 <body>
 <div id="app"></div>
-<script type="text/javascript" src="{{{ bucket_url.value }}}/public/bundle.js"></script>
+<script type="text/javascript">
+    var CLIENT_CONFIG = {};
+
+    // If using a standard API Gateway URL, this value should be the deployed stage name prefixed with a slash.
+    // If using a custom URL, this value should be an empty string ('').
+    CLIENT_CONFIG.endpointPrefix = '/{{{ api_stage.value }}}';
+</script>
 </body>
 </html>

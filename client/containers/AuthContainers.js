@@ -1,5 +1,5 @@
-import {connect} from 'react-redux'
-import * as actions from '~/actions/AuthActions'
+import {connect} from 'react-redux';
+import * as actions from '~/actions/AuthActions';
 
 function mapStateToProps(state)
 {

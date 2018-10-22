@@ -1,1 +1,1 @@
-export {default as auth} from './AuthReducer.js'
+export {default as auth} from './AuthReducer.js';

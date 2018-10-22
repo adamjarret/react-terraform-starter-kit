@@ -1,37 +1,40 @@
-import React from 'react'
-import {Switch, Route} from 'react-router-dom'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import {blueGrey500, blueGrey700} from 'material-ui/styles/colors';
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import PageHome from '~/components/PageHome'
-import PageLogin from '~/components/PageLogin'
-import PageLogout from '~/components/PageLogout'
-import PageNotFound from '~/components/PageNotFound'
-import {homeUrl, loginUrl, logoutUrl} from '~/constants/Urls'
+import React from 'react';
+import {Switch, Route} from 'react-router-dom';
+import Loadable from 'react-loadable';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+import {blueGrey} from '@material-ui/core/colors';
+import Typography from '@material-ui/core/Typography';
+import loading from '~/components/LoadingIndicator';
+import {homeUrl, loginUrl, logoutUrl} from '~/constants/Urls';
 
 // Use style-loader to add <style> elements to the index.html DOM containing the source of the following CSS files
-require('../styles/bootstrap/bootstrap.min.css'); // custom build, ONLY: grids, responsive utils, media object
+//require('../styles/bootstrap/bootstrap.min.css'); // custom build, ONLY: grids, responsive utils, media object
 require('../styles/app.css');
 
-// Needed for onTouchTap (used by material-ui)
-// http://stackoverflow.com/a/34015469/988941
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
-
 // MuiTheme overrides
-const muiTheme = getMuiTheme({
-    fontFamily: "'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-    fontWeight: 300,
+const muiTheme = createMuiTheme({
     palette: {
-        primary1Color: blueGrey500,
-        primary2Color: blueGrey700
+        primary: {
+            main: blueGrey[500],
+        }
     },
+    typography: {
+        fontSize: 16,
+        useNextVariants: true,
+    }
 });
+
+// Dynamically load components (causes webpack to build chunks)
+//  Code is split here by route. Child components may also utilize react-loadable to further split themselves.
+const PageHome = Loadable({loading, loader: () => import(/* webpackChunkName: "PageHome" */ '~/components/PageHome')});
+const PageLogin = Loadable({loading, loader: () => import(/* webpackChunkName: "PageLogin" */ '~/components/PageLogin')});
+const PageLogout = Loadable({loading, loader: () => import(/* webpackChunkName: "PageLogout" */ '~/components/PageLogout')});
+const PageNotFound = Loadable({loading, loader: () => import(/* webpackChunkName: "PageNotFound" */ '~/components/PageNotFound')});
 
 export default function App()
 {
     return (
-        <MuiThemeProvider muiTheme={muiTheme}>
+        <MuiThemeProvider theme={muiTheme}>
             <div>
                 <Switch>
                     <Route path={loginUrl} component={PageLogin}/>
@@ -39,9 +42,11 @@ export default function App()
                     <Route exact path={homeUrl} component={PageHome}/>
                     <Route path="*" component={PageNotFound}/>
                 </Switch>
-                <div className="align-center margin-2x">
-                    <p>Created by <a href="https://atj.me">Adam Jarret</a></p>
-                </div>
+                <footer className="align-center padding-2x">
+                    <Typography component="p">
+                        Created by <a href="https://atj.me">Adam Jarret</a>
+                    </Typography>
+                </footer>
             </div>
         </MuiThemeProvider>
     );

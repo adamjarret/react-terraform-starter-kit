@@ -1,5 +1,5 @@
 #
-# The /favicon.ico resource will proxy requests for the favicon to an HTTP url.
+# The /favicon.ico resource will proxy requests for the favicon to an HTTP URL.
 # This is to enable serving the favicon from the "site root" and is really only useful if the API Gateway stage is
 # deployed to a custom URL (otherwise the favicon is served from /stage_name/favicon.ico which defeats the purpose).
 #

@@ -4,11 +4,28 @@
     "sourceType": "module"
   },
   "env": {
+    "es6": true,
     "node": true
   },
   "rules": {
     "no-console": 0,
-    "no-debugger": 1
+    "no-debugger": 1,
+    "indent": [
+      "error",
+      4
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ]
   },
   "extends": ["eslint:recommended"]
 }

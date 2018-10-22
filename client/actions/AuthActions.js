@@ -1,6 +1,6 @@
-import request from 'superagent'
-import {AUTH_LOGIN, AUTH_LOGIN_OK, AUTH_LOGIN_FAIL, AUTH_LOGOUT} from '~/constants/ActionTypes'
-import {endpointPrefix} from '~/constants/Urls'
+import ky from 'ky';
+import {AUTH_LOGIN, AUTH_LOGIN_OK, AUTH_LOGIN_FAIL, AUTH_LOGOUT} from '~/constants/ActionTypes';
+import {endpointPrefix} from '~/constants/ClientConfig';
 
 export function fetchToken(password)
 {
@@ -8,29 +8,24 @@ export function fetchToken(password)
 
         dispatch({type: AUTH_LOGIN});
 
-        request
-            .post(endpointPrefix + '/api/login')
-            .send({ password })
-            .set('Accept', 'application/json')
-            .end((err, res) => {
-                if (err) {
-                    var e;
-                    try {
-                        e = JSON.parse(err.response.text);
-                    }
-                    catch(parseError) {
-                        e = {message: `Unknown Error (${err.status})`};
-                    }
-                    dispatch({type: AUTH_LOGIN_FAIL, payload: e});
-                } else {
-                    dispatch({type: AUTH_LOGIN_OK, payload: res.body.token});
-                }
-            });
-
-    }
+        ky
+            .post(endpointPrefix + '/api/login', {
+                json: {password}
+            })
+            .json()
+            .then((body) => dispatch({
+                type: AUTH_LOGIN_OK,
+                payload: body.token
+            }))
+            .catch((e) => dispatch({
+                type: AUTH_LOGIN_FAIL,
+                payload: e.response.status === 401 ? {message: 'Incorrect password'} : e
+            }))
+        ;
+    };
 }
 
 export function clearToken()
 {
-    return {type: AUTH_LOGOUT}
+    return {type: AUTH_LOGOUT};
 }
